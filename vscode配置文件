@@ -1,0 +1,86 @@
+vscode 配置文件
+
+1，launch.json
+{  
+    "version": "0.2.0",  
+ "configurations": [  
+        {  
+         "name": "(gdb) Launch", // 配置名称，将会在启动配置的下拉菜单中显示  
+            "type": "cppdbg",       // 配置类型，这里只能为cppdbg  
+         "request": "launch",    // 请求配置类型，可以为launch（启动）或attach（附加）  
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",// 将要进行调试的程序的路径  
+            "args": [],             // 程序调试时传递给程序的命令行参数，一般设为空即可  
+            "stopAtEntry": false,   // 设为true时程序将暂停在程序入口处，一般设置为false  
+         "cwd": "${workspaceFolder}", // 调试程序时的工作目录，一般为${workspaceFolder}即代码所在目录  
+            "environment": [],  
+         "externalConsole": true, // 调试时是否显示控制台窗口，一般设置为true显示控制台  
+            "MIMode": "gdb",  
+         "miDebuggerPath": "D:\\Environment\\MinGW\\bin\\gdb.exe", // miDebugger的路径，注意这里要与MinGw的路径对应  
+            "preLaunchTask": "g++", // 调试会话开始前执行的任务，一般为编译程序，c++为g++, c为gcc  
+         "setupCommands": [  
+                {   
+		    "description": "Enable pretty-printing for gdb",  
+                    "text": "-enable-pretty-printing",  
+                    "ignoreFailures": true  
+                }  
+            ]  
+        }  
+    ] 
+}
+
+
+2.tasks
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++", //这里注意一下，见下文
+            "command": "D:\\Environment\\MinGW\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-ggdb3",   // 生成和调试有关的信息
+                "-Wall",    // 开启额外警告
+                "-static-libgcc",   // 静态链接
+                "-std=c++17",       // 使用c++17标准
+                "-finput-charset=UTF-8",    //输入编译器文本编码 默认为UTF-8
+                "-fexec-charset=GB18030",   //输出exe文件的编码
+                "-D _USE_MATH_DEFINES"
+            ],
+            "options": {
+                "cwd": "D:\\Environment\\MinGW\\bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always", // 在“终端”中显示编译信息的策略，可以为always，silent，never
+                 "focus": false,
+                 "panel": "shared" // 不同的文件的编译信息共享一个终端面板
+            },
+        }
+    ]
+}
+
+3.c_cpp_properties.json
+
+{
+   "configurations": [
+       {
+           "name": "MinGW64",
+           "intelliSenseMode": "gcc-x64",
+           "compilerPath": "D:\\Environment\\MinGW\\bin\\g++.exe",
+           "includePath": [
+               "${workspaceFolder}"
+           ],
+           "cppStandard": "c++17"
+       }
+   ],
+   "version": 4
+}
